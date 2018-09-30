@@ -1,0 +1,21 @@
+**To Run CDMA code**
+--
+
+1. Install ns-allinone-2.30 package
+
+2. Copy the ns-2.30_eurane-1.12.diff file into ns-allinone-2.30/ns2.30
+
+2. Open a new terminal
+
+3. ns-allinone-2.30/ns2.30
+
+4. patch -p1 <  ns-2.30_eurane-1.12.diff
+
+5. ./configure
+
+6. make clean
+
+7. make
+
+------------------------------------------------------------------------------------------
+

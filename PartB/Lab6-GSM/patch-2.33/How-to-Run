@@ -1,0 +1,23 @@
+
+
+**To Configure GSM**
+--
+
+1. Install ns-allinone-2.33
+
+2. Copy the following files into  ns-allinone2.33/ns-2.33/ directory:
+	 - ns-2.33-hls-patch.sh
+	 - ns-2.33-hls.patch
+	 - ns-2.33-hls.Makefile.patch
+
+3. Open a new terminal
+
+4. cd ns-allinone-2.33/ns-2.33	
+
+5.  ./ns-2.33-hls-patch.sh
+
+6. make clean
+
+7. make
+
+################################################
