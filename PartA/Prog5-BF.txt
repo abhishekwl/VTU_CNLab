@@ -1,0 +1,89 @@
+import java.util.*;
+public class BF
+{
+
+	
+	private int nv;							//Number of vertices
+	public static final int maxV=999;		//For unreachable nodes
+	
+	
+	public BF(int noV)						//Constructor to set Num of vertices
+	{
+		nv=noV;
+	}
+	
+	
+//-------------------------------------------------------------------------------------
+	
+	
+	public void evaluate(int src, int a[][])		//Passes Source and Adj Matrix
+	{
+		int i,nd,s,d;								//Node, Source, Dest loop counters resp
+
+		int[] dist=new int[nv+1];
+		
+		for(i=1;i<=nv;i++)						//Loop to initially say all are unreachable		
+			dist[i]=maxV;
+		dist[src]=0;
+		
+		
+		for(nd=1; nd<nv-1; nd++)					//Depicts each node
+		{
+			for(s=1; s<nv; s++)					//Treats each as source node
+			{
+				for(d=1; d<nv; d++)				//Treats each as dest node
+				{
+					if(a[s][d] != maxV)
+					{
+						if(dist[d] > dist[s]+a[s][d] )
+						{
+							dist[d] = dist[s] + a[s][d];
+						}
+							
+					}
+				}
+			}
+		}
+		
+		
+		for(i=1;i<nv;i++)
+			System.out.println("Distance from Source "+src+" to "+i+" is: "+dist[i]);
+	
+	}
+
+	
+//-------------------------------------------------------------------------------------
+
+
+	public static void main(String[] args) 
+	{
+		Scanner sc=new Scanner(System.in);
+		int i,n,src,j;
+		
+		System.out.println("Enter number of vertices");
+		n=sc.nextInt();
+		
+		int a[][]=new int[n+1][n+1];						//Adjacency Matrix
+		System.out.println("Enter Adjacency Matrix");
+		
+		
+		for(i=1;i<=n;i++)									//Reads Matrix
+			for(j=1;j<=n;j++)
+				a[i][j]=sc.nextInt();
+					
+		
+		System.out.println("Enter Source");
+		src=sc.nextInt();
+		
+		BF obj=new BF(n);			//We pass n as we have defined the constructor that way
+		
+		obj.evaluate(src, a);
+		
+		sc.close();
+		
+		
+
+	}
+
+}
+

@@ -1,0 +1,49 @@
+import java.net.*;
+import java.io.*;
+
+public class Server
+{
+	public static void main(String[] args) throws IOException
+	{
+		try
+		{
+		
+			DatagramSocket ds= new DatagramSocket();				//Creates Socket
+			InetAddress ip= InetAddress.getByName("127.0.0.1");		//Gets ip addrs of system
+			int port=5010;
+			System.out.println("Enter text to send");
+			BufferedReader br= new BufferedReader(new InputStreamReader(System.in));	
+			String msg;											//This will read lines
+			
+			
+			
+			while(true)
+			{
+				msg=br.readLine();									//Read line
+				DatagramPacket dp= new DatagramPacket(msg.getBytes(),msg.length(),ip,port);	
+				//Creates datapacket which will be transferred
+				
+				if(!msg.equals("quit"))
+					ds.send(dp);
+				else
+					break;
+				
+			}
+			
+			ds.close();
+			
+		}
+			
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		
+			
+			
+			
+		}
+	}
+
+
+

@@ -1,0 +1,61 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+
+public class ServerVariant {
+	public static void main(String[] args) throws IOException
+	{
+		try
+		{
+		
+			DatagramSocket ds= new DatagramSocket();				//Creates Socket
+			InetAddress ip= InetAddress.getByName("127.0.0.1");		//Gets ip addrs of system
+			int port=5010;
+			
+			BufferedReader br= new BufferedReader(new InputStreamReader(System.in));	
+			String msg="";									//This will read lines
+			
+			String c="Y";
+			
+			
+			
+			System.out.println("Start entering your paragraph \nType 'N' to stop paragraph ");
+			
+			while(true)
+			{
+				while(!c.equals("N"))
+				{
+					c=br.readLine();
+					msg=msg+"\n"+c;
+				}							//This will accept the paragraph	
+				
+				
+				DatagramPacket dp= new DatagramPacket(msg.getBytes(),msg.length(),ip,port);	
+				//Creates datapacket which will be transferred
+				
+				if(!msg.endsWith("quit"))
+					ds.send(dp);
+				else
+					break;
+				
+			}
+			
+			ds.close();
+			
+		}
+			
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		
+			
+			
+			
+		}
+}
+

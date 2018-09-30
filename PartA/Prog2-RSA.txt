@@ -1,0 +1,76 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+public class RSA 
+{
+	private BigInteger m,n,d,e;
+	private int bitLen;
+	
+	public RSA(int bits)
+	{
+		SecureRandom r=new SecureRandom();
+		bitLen=bits;
+		
+		BigInteger p= new BigInteger(bitLen/2,100,r);
+		BigInteger q= new BigInteger(bitLen/2,100,r);
+		System.out.println("p is "+p);			//p & q are random nos
+		System.out.println("q is "+q);	
+		
+		n=p.multiply(q);
+		System.out.println("The value of n is "+n);			//n=p*q
+		
+		
+		m=p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));		//phi of of n
+													//m=(p-1)*(q-1)
+		e=new BigInteger("3");						//Encryption key
+		
+		
+		while(m.gcd(e).intValue()!=1)				//while GCD(m,e) is not 1 [NOT PRIME]
+		{
+			e=e.add(new BigInteger("2"));			//This increments e
+		}
+		
+		d=e.modInverse(m);							//d=(1/e)mod(m)
+			
+	}
+	
+//-------------------------------------------------------------ECRYPT FUNC
+	
+	public synchronized BigInteger encrypt(BigInteger msg)
+	{
+		return msg.modPow(e,n);
+	}	
+													//	-------DECRYPT FUNC
+	public synchronized BigInteger decrypt(BigInteger msg)
+	{
+		return msg.modPow(d,n);
+	}
+	
+//----------------------------------------------------------------
+
+	public static void main(String[] args) throws IOException
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String x;
+
+		RSA rsa=new RSA(256);								//256 is the special code
+		
+		System.out.println("\nEnter message to be sent");
+		x=br.readLine();									//MSG is read
+		BigInteger pt= new BigInteger(x.getBytes());		//MSG is converted into bytes
+		
+		
+		BigInteger ct= rsa.encrypt(pt);						//MSG is encrypted into CIPHER text
+		
+		pt=rsa.decrypt(ct);									//CIPHER is decrypted back into MSG-bytes
+		
+		String msg=new String(pt.toByteArray());			//MSG is obtained from MSG-bytes
+		
+		
+		System.out.println("\nThe received message is :\n"+msg);
+		
+		
+	}
+
+}
+

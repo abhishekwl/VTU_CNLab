@@ -1,0 +1,92 @@
+package CRC;
+import java.util.*;
+
+public class CRC {
+public static void main (String args[])
+{
+	Scanner sc =new Scanner(System.in);
+	int n,g,flag=0;
+	
+	int data[]=new int[100];
+	int gen[]=new int[100];
+	int codedata[]=new int[100];
+	
+	System.out.println("Enter the number of data bits and gen bits");
+	n=sc.nextInt();
+	g=sc.nextInt();
+	
+	System.out.println("Enter the  data bits");
+	for(int i=0;i<n;i++)
+		data[i]=sc.nextInt();						//Actual initial dataword
+	
+	System.out.println("Enter the gen bits");
+	for(int i=0;i<g;i++)
+		gen[i]=sc.nextInt();						//Actual initial divisor word
+	
+	for(int i=n;i<n+g-1;i++)
+		data[i]=0;									//Appends 0s to data word
+	
+	codedata=div(data,gen,n,g);					//Func call converts the data to codedata
+	
+	System.out.println("\n\nThe codeword sent by sender is");
+	for(int i=0;i<n+g-1;i++)
+		System.out.print(data[i]+" ");
+	System.out.println();
+	
+	
+																	//RECEIVERS END
+	System.out.println("\nNow please enter the codeword sent by sender to check for error (copy-paste above line)");
+	for(int i=0;i<n+g-1;i++)
+		data[i]=sc.nextInt();					//Dataword for receivers end
+	
+	codedata=div(data,gen,n,g);					//Func call converts the data to codedata
+	
+	
+		for (int i=n;i<n+g-1;i++)				//Checks for error
+		{
+			if(codedata[i]!=0)
+				flag=1;
+			
+			else
+				flag=0;		
+		}
+		
+		if(flag==1)
+			System.out.println("Error ");
+		else
+			System.out.println("\nNo error");
+		
+		sc.close();			
+}
+
+
+public static int [] div(int data[],int gen[],int n,int g)
+{
+	int k,msb;
+	int r[]=new int[100];
+	for(int i=0;i<g;i++)
+		r[i]=data[i];
+	for(int i=0;i<n;i++)
+	{
+		k=0;
+		msb=r[i];
+		for(int j=i;j<g+i;j++)
+		{
+			if(msb==0)
+				r[j]=r[j]^0;
+			else
+				r[j]=r[j]^gen[k];
+			k++;
+		}
+		r[g+i]=data[g+i];
+	}
+	System.out.println("\nThe codebits appended are");
+	for(int i=n;i<n+g-1;i++)
+	{
+		data[i]=r[i];
+		System.out.print(data[i]+" ");
+	}
+	return data;
+}
+
+}

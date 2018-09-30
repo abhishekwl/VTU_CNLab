@@ -1,0 +1,74 @@
+import java.util.*;
+public class LKB 
+{
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		int nbc=0,op_rate,n,bsize,i,bcount=0;		
+		int pkt[]=new int[10];
+		
+		System.out.println("Enter the size, num of inputs and the output rate");
+		bsize=sc.nextInt();								//Bucket size
+		n=sc.nextInt();									//Num of inputs given
+		op_rate=sc.nextInt();							//Output rate
+		
+		System.out.println("Enter the packet for each second");
+		for(i=0;i<n;i++)
+			pkt[i]=sc.nextInt();		//Packets passed in each sec is stored in the array
+		
+		System.out.println("\nSec\tPktsize\t\tBucket_con\tAccept/reject\t    Pkt_sent\tnbc\t");
+		
+		
+		for(i=0;i<n;i++)			
+		{
+			System.out.print("\n\n"+(i+1));		//Shows the time in sec
+			System.out.print("\t"+pkt[i]);	//Shows what is taken as input
+			bcount=nbc+pkt[i];				//Bucket is getting filled 
+			
+			if(bcount<=bsize)				//As long as bucket is not full
+			{
+				System.out.print("\t\t"+bcount);			//Shows contents in bucket
+				System.out.print("\t\tAccept "+pkt[i]);	//Shows packets accepted that sec
+				System.out.print("\t\t"+Math.min(bcount, op_rate));
+				nbc=sub(bcount, op_rate);
+				System.out.println("\t"+nbc);			//new bucket content after bits are sent out
+			}
+			
+			else
+			{
+				System.out.print("\t\t"+bsize);		
+				System.out.print("\t\tReject " + (bcount-bsize));
+										//Means nothing enters bucket, it only leaves
+				bcount=bsize;			//Restrain contents to only bucket size						
+				System.out.print("\t\t"+Math.min(bcount, op_rate));
+				nbc=sub(bcount,op_rate);
+				System.out.println("\t"+nbc);
+			}
+			
+		}
+		
+		
+		System.out.println("\n\nBucket inputs over, only output happens\n\n");
+		while(nbc!=0)
+		{
+			bcount=nbc;
+			System.out.print("\n\n"+(++i));					//Shows the time in sec
+			System.out.print("\t\t\t"+bcount);					//Shows content size
+			System.out.print("\t\tSent out from "+bcount );
+			System.out.print("\t\t"+Math.min(nbc, op_rate));
+			nbc=nbc-Math.min(nbc, op_rate);
+			System.out.println("\t"+nbc);
+		}
+		sc.close();
+	}
+	
+	
+	public static int sub(int a, int b)
+	{
+		if(a>b)
+			return a-b;
+		return 0;
+	}
+	
+}
+

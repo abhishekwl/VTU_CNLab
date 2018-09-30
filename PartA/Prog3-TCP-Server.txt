@@ -1,0 +1,43 @@
+//We create 2 sockets-One to receive and its assigned to another socket to free main server socket
+
+
+import java.net.*;
+import java.io.*;
+
+
+public class Server
+{
+	public static void main(String[] args) throws IOException
+	{
+		ServerSocket sersok=new ServerSocket(4856);					//Main socket- This receives 
+		System.out.println("SREVER ready for Connection");
+		Socket sok=sersok.accept();							//this assigns request to another socket
+		System.out.println("Connection Established with manoj\n ");
+		
+		InputStream ir=sok.getInputStream();				//Gets input stream-file name
+		BufferedReader br= new BufferedReader(new InputStreamReader(ir));	
+		String fname=br.readLine();
+		System.out.println("File received: "+fname);
+		
+		
+		BufferedReader cr= new BufferedReader(new FileReader(fname));		//Reads file contents
+		OutputStream os=sok.getOutputStream();								//tool to get stream
+		
+		PrintWriter pwrite = new PrintWriter(os,true);
+		
+		String str;
+		
+		System.out.println("The file contents are sent to client ");
+		while( (str=cr.readLine())!= null) 
+			pwrite.println(str);								//	Sending file contents				
+				
+				
+		sersok.close();
+		cr.close();
+		ir.close();
+		
+			
+	}
+
+}
+

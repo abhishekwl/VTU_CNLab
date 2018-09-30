@@ -1,0 +1,43 @@
+//We supply host id & port ID 
+//To supply IP adress we goto cmd and type " ipconfig -a "
+//Else we use addr 127.0.0.1->Local HOST which is a loop back protocol
+
+import java.net.*;
+import java.util.*;
+import java.io.*;
+
+public class Client
+{
+	public static void main(String[] args) throws IOException
+	{
+		Socket sok=new Socket("10.201.13.49",4856);		//Create socket, Sends request to server
+		
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter File name: ");
+		String fname=sc.next();
+		System.out.println();
+		
+		
+		OutputStream os=sok.getOutputStream();				//attaches op stream to socket
+		
+		PrintWriter pwrite = new PrintWriter(os,true);		//This is used to send data over stream
+															//true is autoflush
+		pwrite.println(fname);								//This will send to server
+
+		InputStream is=sok.getInputStream();				//this will read data from server
+		BufferedReader sr= new BufferedReader(new InputStreamReader(is));
+		
+		String str;
+		
+		while( (str=sr.readLine()) != null)				//Keep printing till the file becomes empty
+			System.out.println(str);					
+		
+		sok.close();
+		sc.close();
+		pwrite.close();
+		sr.close();
+			
+	}
+
+}
+
